@@ -1,6 +1,4 @@
-namespace FSharp.MassTransit
-
-open FSharp.CoreEx
+module MassTransitMessaging
 
 
 /// This attribute is used to demark a module that is responsible for handling with asynchronous messages.  When applied the modules `handle` method is automatically registered with the mesage bus to route messags of the relevant type to this module.

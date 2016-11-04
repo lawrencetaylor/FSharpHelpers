@@ -1,10 +1,8 @@
-namespace FSharp.CoreEx
+module Result
 
-type Result<'a, 'b> = 
-  Ok of 'a
-  | Error of 'b
-
-module Result = 
+  type Result<'a, 'b> = 
+    Ok of 'a
+    | Error of 'b
 
   let ofOption error option = 
     match option with

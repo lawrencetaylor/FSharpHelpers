@@ -1,6 +1,4 @@
-namespace FSharp.CoreEx
-
-module Json = 
+module Json
 
   let serialize (x : obj) = Newtonsoft.Json.JsonConvert.SerializeObject(x)
   
