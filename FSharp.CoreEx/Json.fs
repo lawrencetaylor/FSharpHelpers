@@ -1,5 +1,13 @@
 module Json
 
-  let serialize (x : obj) = Newtonsoft.Json.JsonConvert.SerializeObject(x)
+  open Newtonsoft.Json
+
+  let defaultSettings = JsonSerializerSettings()
+
+  let withConverter converter (settings : JsonSerializerSettings) = 
+    settings.Converters.Add(converter)
+    settings
+
+  let serialize (settings : JsonSerializerSettings) (x : obj) = JsonConvert.SerializeObject(x, settings)
   
-  let deserialize<'a> json = Newtonsoft.Json.JsonConvert.DeserializeObject<'a>(json)
+  let deserialize<'a> (settings : JsonSerializerSettings) json = JsonConvert.DeserializeObject<'a>(json, settings)

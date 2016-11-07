@@ -43,6 +43,7 @@
     <Compile Include="Result.fs" />
     <Compile Include="Messaging.MassTransit.fs" />
     <Compile Include="Json.fs" />
+    <Compile Include="Tuple.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <Choose>
