@@ -1,40 +1,44 @@
-module Async
-  let map f xAsync = 
-    async {
-      let! x = xAsync
-      return f x
-    }
+[<AutoOpen>]
+module Async.Core
 
-  let bind f xAsync = 
+type Async() =
+
+  static member bind f xAsync = 
     async { 
       let! x = xAsync
       let! y = f x
       return y
     }
 
-  let ret a = async { return a }
+  static member ret a = async { return a }
 
-  let rec private traverseSeq f list =
-    // define the monadic functions
-    let (>>=) x f = bind f x
-    let retn = ret
+  static member map f xAsync = 
+    async {
+      let! x = xAsync
+      return f x
+    }
+    
+  static member toAsyncSeq x = 
+    let rec traverseSeq f list =
+      // define the monadic functions
+      let (>>=) x f = Async.bind f x
+      let retn = Async.ret
 
-    // define a "cons" function
-    let cons head tail = [head] |> Seq.ofList |> Seq.append(tail)
+      // define a "cons" function
+      let cons head tail = [head] |> Seq.ofList |> Seq.append(tail)
 
-    // right fold over the list
-    let initState = retn Seq.empty
-    let folder head tail = 
-        f head >>= (fun h -> 
-        tail >>= (fun t ->
-        retn (cons h t) ))
+      // right fold over the list
+      let initState = retn Seq.empty
+      let folder head tail = 
+          f head >>= (fun h -> 
+          tail >>= (fun t ->
+          retn (cons h t) ))
 
-    Seq.foldBack folder list initState 
+      Seq.foldBack folder list initState 
+    traverseSeq id x
 
-  let toAsyncSeq x = traverseSeq id x
-
-  let inline startAsPlainTask (work : Async<unit>) = 
+  static member inline startAsPlainTask (work : Async<unit>) = 
       System.Threading.Tasks.Task.Factory.StartNew(fun () -> work |> Async.RunSynchronously)
 
-  let sleepForSeconds seconds = 
+  static member sleepForSeconds seconds = 
     Async.Sleep (seconds*1000)

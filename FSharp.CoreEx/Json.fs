@@ -1,13 +1,16 @@
-module Json
+[<AutoOpen>]
+module Json.Core
 
-  open Newtonsoft.Json
+open Newtonsoft.Json
 
-  let defaultSettings = JsonSerializerSettings()
+type Json () = 
 
-  let withConverter converter (settings : JsonSerializerSettings) = 
+  static member defaultSettings = JsonSerializerSettings()
+
+  static member withConverter converter (settings : JsonSerializerSettings) = 
     settings.Converters.Add(converter)
     settings
 
-  let serialize (settings : JsonSerializerSettings) (x : obj) = JsonConvert.SerializeObject(x, settings)
+  static member serialize (settings : JsonSerializerSettings) (x : obj) = JsonConvert.SerializeObject(x, settings)
   
-  let deserialize<'a> (settings : JsonSerializerSettings) json = JsonConvert.DeserializeObject<'a>(json, settings)
+  static member deserialize<'a> (settings : JsonSerializerSettings) json = JsonConvert.DeserializeObject<'a>(json, settings)

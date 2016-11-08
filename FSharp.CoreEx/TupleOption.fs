@@ -1,3 +1,4 @@
+[<AutoOpen>]
 module Tuple.Option
 
 type Tuple() = 

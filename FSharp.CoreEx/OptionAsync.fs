@@ -1,3 +1,4 @@
+[<AutoOpen>]
 module Option.Async
 
 open Async
