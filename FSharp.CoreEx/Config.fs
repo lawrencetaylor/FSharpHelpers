@@ -1,4 +1,3 @@
-[<AutoOpen>]
 module Config.Core
 
 type Config() =

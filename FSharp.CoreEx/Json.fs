@@ -1,4 +1,3 @@
-[<AutoOpen>]
 module Json.Core
 
 open Newtonsoft.Json

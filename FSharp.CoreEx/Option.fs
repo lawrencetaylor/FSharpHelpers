@@ -1,4 +1,3 @@
-[<AutoOpen>]
 module Option.Core
 
 type Option() =

@@ -1,4 +1,3 @@
-[<AutoOpen>]
 module Async.Core
 
 type Async() =
@@ -17,7 +16,7 @@ type Async() =
       let! x = xAsync
       return f x
     }
-    
+
   static member toAsyncSeq x = 
     let rec traverseSeq f list =
       // define the monadic functions

@@ -1,4 +1,3 @@
-[<AutoOpen>]
 module Result
 
   type Result<'a, 'b> = 

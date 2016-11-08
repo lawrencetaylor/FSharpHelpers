@@ -1,4 +1,3 @@
-[<AutoOpen>]
 module Tuple.Core
 
 type Tuple() = 
