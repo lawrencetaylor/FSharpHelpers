@@ -11,8 +11,8 @@ type Tuple() =
     | true -> Tuple.mapFst f (a, b)
     | false -> (a, b)
 
-  static member fst = fst
-  static member snd = snd
+  static member fst a = fst a
+  static member snd a = snd a
 
   static member both (a, b) =  a && b
 

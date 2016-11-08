@@ -16,8 +16,7 @@ type MessageHandlerAttribute(queueName : string) =
   member val QueueName = queueName with get
 
   module MessageHandler = 
-
-  let queueName (messageHandler : MessageHandlerAttribute ) = messageHandler.QueueName
+    let queueName (messageHandler : MessageHandlerAttribute ) = messageHandler.QueueName
 
 
 /// This attribute is used to demark a module that is responsible for dealing with asynchronous request-response scenarios.  When applied the modules `handle` method is automatically registered with the mesage bus to route messags of the relevant type to this module.

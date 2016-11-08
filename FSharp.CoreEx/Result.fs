@@ -1,50 +1,52 @@
-module Result
+module Result.Core
 
   type Result<'a, 'b> = 
     Ok of 'a
     | Error of 'b
 
-  let ofOption error option = 
-    match option with
-    | None -> Error error
-    | Some o -> Ok o
+  type Result() =
+    static member ofOption error option = 
+      match option with
+      | None -> Error error
+      | Some o -> Ok o
 
-  let throwIfError result = 
-    match result with
-    | Ok a -> a
-    | Error error -> failwithf "Result.Error: %A" error
+    static member throwIfError result = 
+      match result with
+      | Ok a -> a
+      | Error error -> failwithf "Result.Error: %A" error
 
-  let ret a = Ok a
+    static member ret a = Ok a
 
-  let tryGetOk result = 
-    match result with
-    | Ok ok -> Some ok
-    | Error _ -> None
+    static member tryGetOk result = 
+      match result with
+      | Ok ok -> Some ok
+      | Error _ -> None
 
-  let ok (r : Result<'a, _>) = (tryGetOk >> Option.get) r
+    static member ok (r : Result<'a, _>) = (Result.tryGetOk >> Option.get) r
 
-  let apply (resultF : Result<'a ->'b, _>) (resultA : Result<'a, _>) = 
-    match resultF, resultA with
-    | Ok f, Ok a -> Ok (f a)
-    | Error fError, _ -> Error fError
-    | _ , Error aError -> Error aError
-  let map (fOk, fError) result = 
-    match result with
-    | Ok a  -> Ok (fOk a)
-    | Error error -> Error(fError error)
+    static member apply (resultF : Result<'a ->'b, _>) (resultA : Result<'a, _>) = 
+      match resultF, resultA with
+      | Ok f, Ok a -> Ok (f a)
+      | Error fError, _ -> Error fError
+      | _ , Error aError -> Error aError
 
-  let mapOk f = map (f, id)
-  let mapError f = map (id, f)
+    static member map (fOk, fError) result = 
+      match result with
+      | Ok a  -> Ok (fOk a)
+      | Error error -> Error(fError error)
 
-  let bindOk (f : 'a -> Result<'b, 'c>) aR = 
-    match aR with
-    | Ok a -> a |> f
-    | Error x -> Error x
+    static member mapOk f = Result.map (f, id)
+    static member mapError f = Result.map (id, f)
 
-  let ofAsyncToAsync xRA = 
-    match xRA with
-    | Ok xA -> 
-      async { 
-        let! x = xA 
-        return Ok x}
-    | Error e -> async { return Error e}
+    static member bindOk (f : 'a -> Result<'b, 'c>) aR = 
+      match aR with
+      | Ok a -> a |> f
+      | Error x -> Error x
+
+    static member ofAsyncToAsync xRA = 
+      match xRA with
+      | Ok xA -> 
+        async { 
+          let! x = xA 
+          return Ok x}
+      | Error e -> async { return Error e}
