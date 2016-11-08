@@ -1,23 +1,20 @@
 module Tuple.Core
 
 type Tuple() = 
+  static member createWith f a = (a, f a)
+  static member diagonal a = Tuple.createWith id a
 
-  let createW f a = (a, f a)
-
-  static member CreateWith f a = (a, f a)
-  static member Diagonal a = Tuple.CreateWith id a
-
-  static member MapFst f (a, b) = (f a, b)
-  static member MapSnd f (a, b) = (a, f b)
-  static member MapFstOnSndPredicate p f (a, b) = 
+  static member mapFst f (a, b) = (f a, b)
+  static member mapSnd f (a, b) = (a, f b)
+  static member mapFstOnSndPredicate p f (a, b) = 
     match p b with
-    | true -> Tuple.MapFst f (a, b)
+    | true -> Tuple.mapFst f (a, b)
     | false -> (a, b)
 
-  static member Fst = fst
-  static member Snd = snd
+  static member fst = fst
+  static member snd = snd
 
-  static member Both (a, b) =  a && b
+  static member both (a, b) =  a && b
 
   // let ofSndResult (a, bR) = 
   //   match bR with
