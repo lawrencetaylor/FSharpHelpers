@@ -1,6 +1,8 @@
-module Tuple = 
+module Tuple.Option
 
-  let ofSndOptionToOption (a , bO) = 
+type Tuple() = 
+
+  static member OfSndOptionToOption (a , bO) = 
     match bO with
     | Some b -> Some (a, b)
     | None -> None
