@@ -2,3 +2,4 @@ FSharp.Core
 MassTransit
 MassTransit.RabbitMQ
 Newtonsoft.Json
+Suave

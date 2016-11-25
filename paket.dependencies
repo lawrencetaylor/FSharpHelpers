@@ -3,3 +3,4 @@ nuget FAKE
 nuget FSharp.Core
 nuget MassTransit
 nuget MassTransit.RabbitMQ
+nuget Suave
