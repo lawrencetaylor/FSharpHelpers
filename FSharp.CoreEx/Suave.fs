@@ -19,7 +19,7 @@ namespace Suave
     let tryGetHeader<'a> settings (request : HttpRequest) headerKey = 
       request.headers
       |> List.tryFind(fst >> (=) headerKey)
-      |> Option.map(fun (_, json) -> json)
+      |> Option.map(fun (_, json) -> deserialize<'a> settings json)
 
     let makeRequestAdvanced<'a, 'b, 'c> settings (p : HttpRequest -> 'a) (f : 'a -> Async<'b>) (onResult : 'b -> WebPart)  = 
       fun (ctx : HttpContext) -> 
