@@ -1,8 +1,13 @@
-module Config.Core
+namespace System.Configuration
 
-type Config() =
+module Config =
 
-  static member get (configName : string) (fallback : string) = 
+  let setting (configName : string) (fallback : string) = 
     match box (System.Configuration.ConfigurationManager.AppSettings.[configName]) with
+    | null -> fallback
+    | config -> config.ToString()
+
+  let connectionString (connectionStringName : string) (fallback : string) = 
+    match box (System.Configuration.ConfigurationManager.ConnectionStrings.[connectionStringName]) with
     | null -> fallback
     | config -> config.ToString()

@@ -1,6 +1,6 @@
-
+namespace Suave
   
-  module HttpRequest
+  module HttpRequest =
 
     open Suave
     open Suave.Successful
