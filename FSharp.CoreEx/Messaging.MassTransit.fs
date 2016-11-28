@@ -1,7 +1,7 @@
 module MassTransitMessaging
 
 open Async.Core
-open Config.Core
+open System.Configuration
 
 
 /// This attribute is used to demark a module that is responsible for handling with asynchronous messages.  When applied the modules `handle` method is automatically registered with the mesage bus to route messags of the relevant type to this module.
@@ -179,9 +179,9 @@ module MessageBus =
   let createWithConfig busConfig = 
     let config = 
       { busConfig with
-          Host =      Config.get "Messaging::Host" defaultConfig.Host
-          Username =  Config.get "Messaging::Username" defaultConfig.Username
-          Password =  Config.get "Messaging::Password" defaultConfig.Password
+          Host =      Config.setting "Messaging::Host" defaultConfig.Host
+          Username =  Config.setting "Messaging::Username" defaultConfig.Username
+          Password =  Config.setting "Messaging::Password" defaultConfig.Password
       }
     let uri = System.Uri(sprintf "rabbitmq://%s" config.Host)
     let busRef = ref null
