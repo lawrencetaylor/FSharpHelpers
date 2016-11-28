@@ -16,13 +16,21 @@ namespace Suave
       |> System.Text.Encoding.UTF8.GetString
       |> deserialize<'a> settings
 
-    let private makeRequest<'a, 'b> settings (f : 'a -> Async<'b>) (onResult : 'b -> WebPart)  = 
+    let private requestHeaders<'a> settings (request : HttpRequest) headerKey = 
+      request.headers
+      |> List.tryFind(fst >> (=) headerKey)
+      |> Option.map(fun (_, json) -> json)
+
+    let private makeRequestAdvanced<'a, 'b, 'c> settings (p : HttpRequest -> 'a) (f : 'a -> Async<'b>) (onResult : 'b -> WebPart)  = 
       fun (ctx : HttpContext) -> 
         async {
-          let req = requestBody<'a> settings ctx.request
+          let req = p ctx.request
           let! res = f req
           return! onResult res ctx
         }
+
+    let private makeRequest<'a, 'b> settings (f : 'a -> Async<'b>) (onResult : 'b -> WebPart)  = 
+      makeRequestAdvanced settings (requestBody<'a> settings) f onResult
 
     let private makeRequestSimple<'a, 'b> settings (f : 'a -> Async<'b>) : WebPart = makeRequest settings f (serialize settings >> OK)
 
