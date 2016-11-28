@@ -21,7 +21,7 @@ namespace Suave
       |> List.tryFind(fst >> (=) headerKey)
       |> Option.map(fun (_, json) -> json)
 
-    let private makeRequestAdvanced<'a, 'b, 'c> settings (p : HttpRequest -> 'a) (f : 'a -> Async<'b>) (onResult : 'b -> WebPart)  = 
+    let makeRequestAdvanced<'a, 'b, 'c> settings (p : HttpRequest -> 'a) (f : 'a -> Async<'b>) (onResult : 'b -> WebPart)  = 
       fun (ctx : HttpContext) -> 
         async {
           let req = p ctx.request
