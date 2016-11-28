@@ -16,7 +16,7 @@ namespace Suave
       |> System.Text.Encoding.UTF8.GetString
       |> deserialize<'a> settings
 
-    let private requestHeaders<'a> settings (request : HttpRequest) headerKey = 
+    let tryGetHeader<'a> settings (request : HttpRequest) headerKey = 
       request.headers
       |> List.tryFind(fst >> (=) headerKey)
       |> Option.map(fun (_, json) -> json)
