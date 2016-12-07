@@ -1,6 +1,4 @@
-module FSharp.Core
-
-module Async =
+module Async
 
   let bind f xAsync = 
     async { 
