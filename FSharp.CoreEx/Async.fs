@@ -1,27 +1,27 @@
-module Async.Core
+module FSharp.Core
 
-type Async() =
+module Async =
 
-  static member bind f xAsync = 
+  let bind f xAsync = 
     async { 
       let! x = xAsync
       let! y = f x
       return y
     }
 
-  static member ret a = async { return a }
+  let ret a = async { return a }
 
-  static member map f xAsync = 
+  let map f xAsync = 
     async {
       let! x = xAsync
       return f x
     }
 
-  static member toAsyncSeq x = 
+  let toAsyncSeq x = 
     let rec traverseSeq f list =
       // define the monadic functions
-      let (>>=) x f = Async.bind f x
-      let retn = Async.ret
+      let (>>=) x f = bind f x
+      let retn = ret
 
       // define a "cons" function
       let cons head tail = [head] |> Seq.ofList |> Seq.append(tail)
@@ -36,8 +36,8 @@ type Async() =
       Seq.foldBack folder list initState 
     traverseSeq id x
 
-  static member inline startAsPlainTask (work : Async<unit>) = 
+  let inline startAsPlainTask (work : Async<unit>) = 
       System.Threading.Tasks.Task.Factory.StartNew(fun () -> work |> Async.RunSynchronously)
 
-  static member sleepForSeconds seconds = 
+  let sleepForSeconds seconds = 
     Async.Sleep (seconds*1000)
