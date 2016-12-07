@@ -4,21 +4,21 @@ namespace Suave
 
     open Suave
     open Suave.Successful
-    open Json.Core
+    open Newtonsoft.Json
 
     let deserialize<'a> settings = Json.deserialize<'a> settings
 
     let serialize settings : (obj -> string) = Json.serialize settings
 
     open Microsoft.FSharp.Reflection
-    let private requestBody<'a> settings request = 
+    let getBody<'a> settings request = 
       request.rawForm
       |> System.Text.Encoding.UTF8.GetString
       |> deserialize<'a> settings
 
-    let tryGetHeader<'a> settings (request : HttpRequest) headerKey = 
+    let tryGetHeader<'a> settings (request : HttpRequest) (headerKey : string) : 'a option = 
       request.headers
-      |> List.tryFind(fst >> (=) headerKey)
+      |> List.tryFind(fst >> (=) (headerKey.ToLower()))
       |> Option.map(fun (_, json) -> deserialize<'a> settings json)
 
     let makeRequestAdvanced<'a, 'b, 'c> settings (p : HttpRequest -> 'a) (f : 'a -> Async<'b>) (onResult : 'b -> WebPart)  = 
@@ -30,7 +30,7 @@ namespace Suave
         }
 
     let private makeRequest<'a, 'b> settings (f : 'a -> Async<'b>) (onResult : 'b -> WebPart)  = 
-      makeRequestAdvanced settings (requestBody<'a> settings) f onResult
+      makeRequestAdvanced settings (getBody<'a> settings) f onResult
 
     let private makeRequestSimple<'a, 'b> settings (f : 'a -> Async<'b>) : WebPart = makeRequest settings f (serialize settings >> OK)
 
