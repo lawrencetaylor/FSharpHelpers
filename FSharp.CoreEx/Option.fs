@@ -1,8 +1,6 @@
-module Option.Core
+module Option
 
-type Option() =
-
-  static member fallback f o = 
-    match o with
-    | Some v -> v
-    | None -> f
+let fallback f o = 
+  match o with
+  | Some v -> v
+  | None -> f
