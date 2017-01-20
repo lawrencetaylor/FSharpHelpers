@@ -1,3 +1,5 @@
+#nowarn "25"
+
 namespace Newtonsoft.Json
 
 open Newtonsoft.Json
